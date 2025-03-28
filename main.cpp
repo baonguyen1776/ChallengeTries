@@ -77,6 +77,28 @@ void Deletion(TrieNode*& root, const string& key) {
     root = del(root, key, 0);
 }
 
+void collectWords(TrieNode* pNode, const string prefix){
+    if (pNode == nullptr) return;
+    if (pNode->isEnd == true)
+        cout << prefix << endl;
+
+    for (char c = 'a'; c <= 'z'; c++){
+        if (pNode->child[c - 'a'] != nullptr)
+            collectWords(pNode->child[c - 'a'], prefix + c);
+    }
+}
+TrieNode* findLastNodeOfPrefix(TrieNode* pRoot, const string& prefix, int depth = 0){
+    if (pRoot == nullptr) return nullptr;
+    if (depth == prefix.size()) return pRoot;
+
+    char c = prefix[depth];
+    return findLastNodeOfPrefix(pRoot->child[c - 'a'], prefix, depth + 1);
+}
+void findWordsWithPrefix(TrieNode* pRoot, const string& prefix) {
+    TrieNode*Node = findLastNodeOfPrefix(pRoot, prefix);
+    if (Node == nullptr) return;
+    collectWords(Node, prefix);
+}
 
 int main() {
     TrieNode* pRoot = createNode();
